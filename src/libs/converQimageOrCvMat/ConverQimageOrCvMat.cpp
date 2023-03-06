@@ -56,6 +56,7 @@ QImage ConverQimageOrCvMat::conver( const cv::Mat &cvMat ) {
 
 cv::Mat ConverQimageOrCvMat::conver( const QImage &qtImage ) {
 	QImage currnetImage = qtImage;
+	currnetImage = currnetImage.convertToFormat(QImage::Format_RGB888);
 	int channels = 0;
 	QImage::Format format = currnetImage.format();
 	int typeFlage = 0;
@@ -73,8 +74,6 @@ cv::Mat ConverQimageOrCvMat::conver( const QImage &qtImage ) {
 		typeFlage = CV_16UC3;
 		channels = 3;
 		break;
-	case QImage::Format_RGB32 :
-		currnetImage = currnetImage.convertToFormat(QImage::Format_RGB888);
 	case QImage::Format_RGB888 :
 		typeFlage = CV_8UC3;
 		channels = 3;

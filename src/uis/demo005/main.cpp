@@ -4,12 +4,16 @@
 #include <QLabel>
 #include <QCamera>
 #include <QMediaCaptureSession>
+#include <QMediaPlayer>
 #include <QMediaRecorder>
 #include <QImageCapture>
 #include <QMediaDevices>
 #include <QVideoSink>
 #include <QThread>
 #include <QMediaPlayer>
+#include <QVideoWidget>
+
+#include "ConverQimageOrCvMat.h"
 
 class Thread : public virtual QThread {
 	QImage image;
@@ -48,27 +52,23 @@ public:
 
 int main( int argc, char *argv[] ) {
 	QApplication a(argc, argv);
-	if( QMediaDevices::videoInputs().count() == 0 ) {
-		QMessageBox::information(nullptr, QObject::tr("错误"), QObject::tr("没有找到输入设备"));
-		return -1;
-	}
 
-	// 默认的视频输入设备
-	QCameraDevice defaultVideoInput = QMediaDevices::defaultVideoInput();
-	// 设置摄像机
-	QCamera camera(defaultVideoInput);
-	camera.setFocusMode(QCamera::FocusModeManual);
-	// 媒体会话
-	QMediaCaptureSession captureSession;
-	// 设备
-	QVideoSink videoSink;
+	QMediaPlayer player;
 	// 拍摄显示
 	QLabel captureImageLabel;
-	captureSession.setCamera(&camera);
-	captureSession.setVideoSink(&videoSink);
-	Thread *pThread = nullptr;
+	//QVideoWidget videoWidget;
+	QString url = QObject::tr("C:/quickDownLoads/OpenCV入门到进阶：实战三大典型项目/03章 图像&视频的加载与展示/3-7.mp4");
+	player.setSource(QUrl(url));
+	// 设备
+	//player.setVideoSink(&videoSink);
+	//player.setVideoOutput(&videoWidget);
+	QVideoSink *videoSink = new QVideoSink;
+	player.setVideoSink(videoSink);
+
+	//Thread *pThread = nullptr;
 	// 信号
-	QObject::connect(&videoSink, &QVideoSink::videoFrameChanged, [&]( const QVideoFrame &frame ) {
+	QObject::connect(videoSink, &QVideoSink::videoFrameChanged, [&]( const QVideoFrame &frame ) {
+		//qDebug() << "videoSink";
 		//if( pThread )
 		//	if( pThread->isRunning() )
 		//		return;
@@ -77,17 +77,23 @@ int main( int argc, char *argv[] ) {
 		//pThread = new Thread(&videoSink, frame, captureImageLabel);
 		//pThread->start();
 		// 截图缩放
-		QPixmap pixmap = QPixmap::fromImage(frame.toImage());
-		//	pixmap = pixmap.scaled(captureImageLabel.width(), captureImageLabel.height(), Qt::KeepAspectRatio, Qt::FastTransformation);
+		QImage image = frame.toImage();
+		QPixmap pixmap = QPixmap::fromImage(image);
+		pixmap = pixmap.scaled(captureImageLabel.width(), captureImageLabel.height(), Qt::KeepAspectRatio, Qt::FastTransformation);
 		captureImageLabel.setPixmap(pixmap);
 	});
-
-	camera.start();
-	captureImageLabel.setWindowTitle(QObject::tr("拍摄截图预览"));
+	QObject::connect(&player, &QMediaPlayer::errorOccurred, [&]( QMediaPlayer::Error error, const QString &errorString ) {
+		qDebug() << error << " : " << errorString;
+	});
+	player.play();
+	captureImageLabel.setWindowTitle(QObject::tr("视频播放"));
 	captureImageLabel.show();
+	//videoWidget.setWindowTitle(QObject::tr("视频播放"));
+	//videoWidget.show();
 	int exec = a.exec();
-	if( pThread )
+	/*if( pThread )
 		pThread->wait();
-	delete pThread;
+	delete pThread;*/
+	delete videoSink;
 	return exec;
 }
