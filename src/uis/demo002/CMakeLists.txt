@@ -5,6 +5,8 @@ message("name =" ${CURRENT_FOLDER})
 project(${CURRENT_FOLDER}  VERSION 0.1 LANGUAGES CXX)
 message("============ ${CURRENT_FOLDER}")
 
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Multimedia REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS MultimediaWidgets REQUIRED)
 
 # 当前目录下也有代码
 FILE(GLOB SRC_LIST "*.cpp" "*.c" "*.hpp" "*.h" "*.ui")
@@ -28,6 +30,8 @@ target_link_libraries(
 	${PROJECT_NAME} 
 PRIVATE 
 	Qt${QT_VERSION_MAJOR}::Widgets
+	Qt${QT_VERSION_MAJOR}::Multimedia
+	Qt${QT_VERSION_MAJOR}::MultimediaWidgets
 	${OpenCV_LIBS}
 	converQimageOrCvMat
 )
