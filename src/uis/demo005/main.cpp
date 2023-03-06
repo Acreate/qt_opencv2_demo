@@ -57,7 +57,10 @@ int main( int argc, char *argv[] ) {
 	// 拍摄显示
 	QLabel captureImageLabel;
 	//QVideoWidget videoWidget;
-	QString url = QObject::tr("C:/quickDownLoads/OpenCV入门到进阶：实战三大典型项目/03章 图像&视频的加载与展示/3-7.mp4");
+	// 不支持 "\\" 路径
+	QString url = QDir::currentPath().append("/").append("test1.mp4").replace("\\", "/");
+	qDebug() << url;
+	//QString url = QObject::tr("C:/quickDownLoads/OpenCV入门到进阶：实战三大典型项目/03章 图像&视频的加载与展示/3-7.mp4");
 	player.setSource(QUrl(url));
 	// 设备
 	//player.setVideoSink(&videoSink);
