@@ -5,6 +5,13 @@ message("name =" ${CURRENT_FOLDER})
 project(${CURRENT_FOLDER}  VERSION 0.1 LANGUAGES CXX)
 message("============ ${CURRENT_FOLDER}")
 
+FIND_PACKAGE( Qt6 REQUIRED COMPONENTS Core Widgets Gui LinguistTools )
+
+SET( OpenCV_DIR "C:/libs/opencv/build/")
+
+find_package(OpenCV REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS}) 
+
 
 # 当前目录下也有代码
 FILE(GLOB SRC_LIST "*.cpp" "*.c" "*.hpp" "*.h" )

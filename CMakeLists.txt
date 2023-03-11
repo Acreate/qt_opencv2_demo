@@ -9,11 +9,14 @@ message("name =" ${prject_name})
 project(${prject_name} VERSION 0.1 LANGUAGES CXX)
 message("============ ${CURRENT_FOLDER}")
 
-SET( QT_VERSION_MAJOR 6 )
-SET( DEPLOY_QT_HOME "C:/Qt/6.4.2/msvc2019_64/" )
-SET( Qt6_DIR "${DEPLOY_QT_HOME}/lib/cmake/Qt6" )
-SET( Qt6CoreTools_DIR "${DEPLOY_QT_HOME}/lib/cmake/Qt6CoreTools")
-SET( Qt6GuiTools_DIR "${DEPLOY_QT_HOME}/lib/cmake/Qt6GuiTools" )
+## 假设没有被定义，则开始定义
+if(NOT QT_VERSION_MAJOR)
+	SET( QT_VERSION_MAJOR 6 )
+	SET( DEPLOY_QT_HOME "C:/Qt/6.4.2/msvc2019_64/" )
+	SET( Qt6_DIR "${DEPLOY_QT_HOME}/lib/cmake/Qt6" )
+	SET( Qt6CoreTools_DIR "${DEPLOY_QT_HOME}/lib/cmake/Qt6CoreTools")
+	SET( Qt6GuiTools_DIR "${DEPLOY_QT_HOME}/lib/cmake/Qt6GuiTools" )
+endif(NOT QT_VERSION_MAJOR)
 
 FIND_PACKAGE( Qt6 REQUIRED COMPONENTS Core Widgets Gui LinguistTools )
 

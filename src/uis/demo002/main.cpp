@@ -46,7 +46,7 @@ int main( int argc, char *argv[] ) {
 	});
 
 	recorder.setQuality(QMediaRecorder::HighQuality);
-	QString localfile = QDir::currentPath().append(QDir::separator()).append("recorder.mp4");
+	QString localfile = QDir::currentPath().append(QDir::separator()).append("recorder.mp4").replace("\\", "/");
 	recorder.setOutputLocation(QUrl::fromLocalFile(localfile));
 	QObject::connect(&recorder, &QMediaRecorder::recorderStateChanged, [&]( QMediaRecorder::RecorderState state ) {
 		qDebug() << "state : " << state;
