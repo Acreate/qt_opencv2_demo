@@ -43,7 +43,7 @@ int main( int argc, char *argv[] ) {
 	cv::imshow("outImg2", outImg);
 
 	cv::waitKey();
-
+	
 	cv::destroyAllWindows();
 	return 0;
 }
